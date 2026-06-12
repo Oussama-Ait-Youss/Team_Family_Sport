@@ -1,58 +1,106 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🥋 Team Family Sports
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**Système de Gestion Intégrée pour Club d'Arts Martiaux (SaaS Multi-Tenant)**
 
-## About Laravel
+![Laravel](https://img.shields.io/badge/Laravel-13-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![MySQL](https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+**Team Family Sports** est une plateforme complète conçue pour digitaliser l'écosystème d'un dojo ou d'un club d'arts martiaux. De la vitrine publique à la gestion financière stricte, en passant par le suivi des ceintures et la génération d'arbres de tournois, cette application centralise toute l'administration sportive et opérationnelle.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## ✨ Fonctionnalités Principales
 
-## Learning Laravel
+### 🔒 Gateway & Workflow d'Approbation
+- Inscription publique avec sélection de la discipline (Karaté, Kickboxing, etc.).
+- Système de sas de validation : tout nouveau compte est en statut `pending` jusqu'à l'approbation de l'Administrateur.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 👑 Espace Administrateur (Propriétaire)
+- **Gestion des utilisateurs :** Approbation, suspension et gestion des rôles.
+- **Gestion Financière :** Suivi strict des abonnements (cycle automatisé de 30 jours, alertes de retard).
+- **Tournois :** Création d'événements, gestion des catégories (poids/âge) et génération automatique d'arbres de combats (brackets).
+- **Dashboard :** Vue d'ensemble des statistiques du club (revenus, présences, inscriptions).
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 🥋 Espace Coach (Entraîneur)
+- **Autonomie de Planification :** Création et gestion de ses propres sessions d'entraînement.
+- **Roll Call Numérique :** Interface mobile-first pour marquer les présences (Présent, Absent, Excusé) directement sur le tatami.
+- **Suivi Pédagogique :** Évaluation et promotion des grades (ceintures) des apprenants.
+- **Profil Public :** Affichage des diplômes, Dan, et années d'expérience.
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+### 🥊 Espace Apprenant (Player)
+- **Suivi de Progression :** Historique des grades et des présences.
+- **Gestion Financière :** Visibilité sur l'état de l'abonnement et la prochaine échéance.
+- **Planning :** Consultation des sessions à venir pour sa discipline et son groupe.
 
-## Agentic Development
+---
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## 🛠️ Stack Technique
+
+### Backend (API RESTful)
+- **Framework :** Laravel 13
+- **Base de données :** MySQL
+- **Authentification :** Laravel Sanctum (Token-based)
+- **Infrastructure :** Docker / Laravel Sail
+
+### Frontend (SPA)
+- **Bibliothèque :** React.js
+- **Styling :** Tailwind CSS
+- **Requêtes HTTP :** Axios & TanStack Query (React Query) pour le state management asynchrone.
+
+---
+
+## 🚀 Installation & Démarrage (Environnement de Développement)
+
+Prérequis : `Docker`, `Docker Compose`, `Git`, `Node.js` (pour le frontend).
+
+### 1. Cloner le projet
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/votre-compte/team-family-sports.git
+cd team-family-sports
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Configuration du Backend (Laravel Sail)
 
-## Contributing
+```bash
+cp .env.example .env
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v $(pwd):/var/www/html \
+    -w /var/www/html \
+    laravelsail/php83-composer:latest \
+    composer install --ignore-platform-reqs
+```
 
-## Code of Conduct
+```bash
+./vendor/bin/sail up -d
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+./vendor/bin/sail artisan key:generate
+./vendor/bin/sail artisan migrate:fresh --seed
+```
 
-## Security Vulnerabilities
+### 3. Configuration du Frontend (React)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+npm install
+npm run dev
+```
 
-## License
+## 📅 Roadmap du Projet (Phases Agile)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- [ ] Phase 1 : Configuration Docker/Sail, base de données (ERD) et authentification (Sanctum) avec le sas de validation Admin.
+- [ ] Phase 2 : API CRUD pour la gestion des profils globaux (Coach/Apprenant), des disciplines et de la vitrine publique.
+- [ ] Phase 3 : Moteur de gestion pédagogique (création des groupes, autonomie de planification des Coaches et système de Roll call).
+- [ ] Phase 4 : Module financier (automatisation du cycle de paiement date-à-date) et Dashboard Admin.
+- [ ] Phase 5 : Module compétitif (architecture des tournois, catégories de poids/âge et brackets).
+
+## 🤝 Contribution & Équipe
+
+Ce projet est conçu avec une approche Agile/Scrum. Les développements sont répartis sous forme de User Stories assignées lors des sprints de développement.
+
+Maintenu par l'équipe de développement de Team Family Sports.
