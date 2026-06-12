@@ -35,9 +35,16 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/payments', [\App\Http\Controllers\PaymentController::class, 'index']);
         Route::post('/payments', [\App\Http\Controllers\PaymentController::class, 'store']);
         
-        // Admin Dashboard Route
+        // Phase 5: Competitive Module (Active Users)
+        Route::get('/tournaments', [\App\Http\Controllers\TournamentController::class, 'index']);
+        
+        // Admin Routes
         Route::middleware('admin')->group(function () {
             Route::get('/admin/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index']);
+            
+            // Phase 5: Competitive Module (Admin Only)
+            Route::post('/tournaments', [\App\Http\Controllers\TournamentController::class, 'store']);
+            Route::patch('/matches/{tournament_match}/winner', [\App\Http\Controllers\MatchController::class, 'updateResult']);
         });
     });
 });
