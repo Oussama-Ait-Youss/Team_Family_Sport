@@ -30,5 +30,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/sessions', [\App\Http\Controllers\SessionController::class, 'store']);
         
         Route::post('/sessions/{session}/attendances', [\App\Http\Controllers\AttendanceController::class, 'store']);
+        
+        // Phase 4: Financial Module
+        Route::get('/payments', [\App\Http\Controllers\PaymentController::class, 'index']);
+        Route::post('/payments', [\App\Http\Controllers\PaymentController::class, 'store']);
+        
+        // Admin Dashboard Route
+        Route::middleware('admin')->group(function () {
+            Route::get('/admin/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index']);
+        });
     });
 });
