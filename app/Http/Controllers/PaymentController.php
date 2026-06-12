@@ -26,7 +26,22 @@ class PaymentController extends Controller
         $validated = $request->validated();
         
         $paymentDate = Carbon::parse($validated['payment_date']);
-        $nextDueDate = $paymentDate->copy()->addDays(30);
+        
+        // Find the user's latest payment to get their current due date
+        $latestPayment = Payment::where('user_id', $validated['user_id'])
+            ->orderByDesc('next_due_date')
+            ->first();
+
+        if ($latestPayment && $latestPayment->next_due_date) {
+            // Calculate from current due date to preserve billing cycle
+            $baseDate = Carbon::parse($latestPayment->next_due_date);
+        } else {
+            // First payment, calculate from payment date
+            $baseDate = $paymentDate->copy();
+        }
+
+        // Add one calendar month without overflowing (e.g., Jan 31 -> Feb 28)
+        $nextDueDate = $baseDate->addMonthNoOverflow();
 
         $payment = Payment::create([
             'user_id' => $validated['user_id'],
