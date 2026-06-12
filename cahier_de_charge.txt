@@ -1,0 +1,85 @@
+Cahier des Charges : DojoManagement System (DMS)
+1. Présentation du Projet
+
+    Nom du projet : DojoManagement System (DMS)
+
+    Objectif : Digitaliser l'écosystème d'un club d'arts martiaux pour centraliser la gestion administrative, la performance sportive et le suivi opérationnel, avec un contrôle strict des accès via un système d'approbation.
+
+    Vision : Offrir une plateforme multi-tenant fluide. Le public peut consulter les offres, s'inscrire, puis patienter dans un espace restreint jusqu'à l'approbation de l'administration pour débloquer son environnement de Coach ou d'Apprenant.
+
+2. Architecture Technique
+
+    Backend : Laravel 13 (API RESTful, Eloquent ORM, Sanctum pour l'authentification).
+
+    Frontend : React.js (SPA, Tailwind CSS, Axios, TanStack Query).
+
+    Base de données : MySQL.
+
+    Infrastructure : Docker / Laravel Sail.
+
+3. Rôles et Utilisateurs
+
+Le système repose sur un modèle d'état strict (pending, active, suspended). Lors de l'inscription, tout compte est placé en statut pending.
+
+    Visiteur (Guest) : Consulte les disciplines (Karaté, Kickboxing, etc.) via une vitrine publique et soumet une demande d'inscription en choisissant son rôle souhaité et sa discipline.
+
+    Administrateur (Propriétaire) : Super-utilisateur. Valide les comptes (passage de pending à active), gère les finances globales, supervise l'ensemble des statistiques et configure les tournois.
+
+    Coach (Entraîneur) : Professionnel du sport. Une fois approuvé, il gagne l'autonomie pour créer ses sessions de cours, gérer son planning, marquer les présences et évaluer les grades.
+
+    Apprenant (Adhérent / Player) : Utilisateur final. Une fois approuvé, il accède à son tableau de bord personnel pour suivre ses progrès, son historique de présence, ses prochains paiements et ses grades.
+
+4. Spécifications Fonctionnelles Détaillées
+A. Gestion des Profils & Données Globales
+
+    Données Biométriques Globales : La date de naissance (pour calcul dynamique de l'âge), le poids et la taille sont obligatoires à l'inscription pour tous les utilisateurs afin d'automatiser le placement dans les catégories de tournois.
+
+    Profil Coach : Spécialités (Dan, diplômes, années d'expérience).
+
+    Profil Apprenant : Suivi de progression (ceinture actuelle), date d'adhésion.
+
+B. Gestion Opérationnelle (Sessions & Planning)
+
+    Autonomie de Planification : Le Coach crée et gère la réalisation technique de ses propres sessions (heures de début et de fin, assignation à un groupe spécifique comme "Kids" ou "Adults").
+
+    Suivi des Présences (Roll Call) :
+
+        Le Coach ouvre la session sur son interface mobile/tablette.
+
+        Appel numérique : Chaque élève est marqué présent, absent ou excusé.
+
+        Génération d'un registre sécurisé servant de métrique pour le Coach et de preuve pour l'Admin.
+
+C. Gestion Financière & Abonnements
+
+    Cycle de Paiement Strict (Date à Date) : Le système de facturation fonctionne sur un modèle mensuel récurrent.
+
+        Un paiement effectué le 1er du mois génère automatiquement la prochaine échéance (next_due_date) au 1er du mois suivant.
+
+    Statuts et Restrictions : Gestion des états de paiement (paid, pending, overdue). En cas de retard, le système alerte l'Admin et peut restreindre dynamiquement l'accès de l'Apprenant.
+
+D. Gestion Sportive & Compétitions
+
+    Grade Tracking : Système de promotion de grade lié à la discipline (validation par le Coach).
+
+    Tournois & Brackets :
+
+        Création d'événements par l'Admin avec des catégories strictes basées sur l'âge et le poids.
+
+        Génération d'arbres de combat (brackets) dynamiques. Le système intègre une logique d'avancement automatique (next_match_id) propulsant le gagnant au tour suivant.
+
+5. Exigences de Sécurité & Performance
+
+    Validation Gateway : Un middleware Laravel intercepte toute requête d'un utilisateur au statut pending et le redirige vers une page "En attente d'approbation". Aucune donnée métier n'est divulguée avant validation.
+
+    Contrôle d'Accès (RBAC) : Routage API strictement cloisonné (/api/admin, /api/coach, /api/player) basé sur une table de rôles évolutive.
+
+    Responsive Design : L'interface Coach doit être mobile-first pour permettre une utilisation fluide sur les tatamis pendant les cours.
+
+6. Planning des Livrables (Phases d'Implémentation)
+Phase	Description de l'itération
+Phase 1	Configuration Docker/Sail, base de données (ERD complet) et authentification (Sanctum) avec le sas de validation Admin.
+Phase 2	API CRUD pour la gestion des profils globaux (Coach/Apprenant), des disciplines et l'affichage de la vitrine publique.
+Phase 3	Moteur de gestion pédagogique : création des groupes, autonomie de planification des Coaches et système de Roll call.
+Phase 4	Module financier : automatisation du cycle de paiement date-à-date et conception du Dashboard Admin (alertes).
+Phase 5	Module compétitif : architecture des tournois, gestion des catégories (poids/âge) et génération des brackets de combat.
