@@ -8,29 +8,31 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('auth_token') || null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Initialisation de la session au chargement
+  // Restaurer la session au montage
   useEffect(() => {
-    const initAuth = async () => {
+    const fetchUser = async () => {
       if (token) {
         try {
-          const response = await api.get('/me');
-          setUser(response.data);
+          const response = await api.get('/user/status');
+          setUser(response.data.data || response.data);
         } catch (error) {
-          console.error("Échec de l'authentification", error);
+          console.error('Session invalide ou expirée', error);
           logout();
         }
       }
       setIsLoading(false);
     };
 
-    initAuth();
+    fetchUser();
   }, [token]);
 
   const login = async (email, password) => {
     setIsLoading(true);
     try {
       const response = await api.post('/login', { email, password });
-      const { access_token, user: userData } = response.data;
+      
+      const access_token = response.data.token || response.data.access_token;
+      const userData = response.data.user;
       
       localStorage.setItem('auth_token', access_token);
       setToken(access_token);
@@ -49,9 +51,11 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      if (token) await api.post('/logout');
+      if (token) {
+        await api.post('/logout');
+      }
     } catch (error) {
-      console.error("Erreur lors de la déconnexion", error);
+      console.error('Erreur lors de la déconnexion', error);
     } finally {
       localStorage.removeItem('auth_token');
       setToken(null);

@@ -7,23 +7,23 @@ const ProtectedRoute = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-zinc-900">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-600"></div>
+      <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
       </div>
     );
   }
 
-  // Non authentifié -> redirection login
+  // Redirection si non authentifié
   if (!token || !user) {
     return <Navigate to="/login" replace />;
   }
 
-  // Authentifié mais en attente -> redirection gateway d'approbation
+  // Redirection si compte en attente
   if (user.status === 'pending') {
     return <Navigate to="/pending-approval" replace />;
   }
 
-  // Tout est bon, on affiche les routes enfants
+  // Accès autorisé
   return <Outlet />;
 };
 
