@@ -21,5 +21,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update']);
         
         // Future routes (dashboard, sessions, etc.) will go here
+        
+        // Phase 3: Pedagogical Engine & Roll Call
+        Route::get('/groups', [\App\Http\Controllers\GroupController::class, 'index']);
+        Route::post('/groups/{group}/players', [\App\Http\Controllers\GroupController::class, 'assignPlayer']);
+        
+        Route::get('/sessions', [\App\Http\Controllers\SessionController::class, 'index']);
+        Route::post('/sessions', [\App\Http\Controllers\SessionController::class, 'store']);
+        
+        Route::post('/sessions/{session}/attendances', [\App\Http\Controllers\AttendanceController::class, 'store']);
     });
 });
