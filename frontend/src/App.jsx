@@ -3,16 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
-
-// Placeholder pour le Dashboard
-const Dashboard = () => (
-  <div className="min-h-screen bg-zinc-100 flex items-center justify-center font-sans">
-    <div className="bg-white p-8 rounded-xl shadow-md text-center max-w-lg border-t-4 border-red-600">
-      <h1 className="text-2xl font-bold text-zinc-800 mb-2 uppercase tracking-wide">Bienvenue sur le Dashboard</h1>
-      <p className="text-zinc-500">Votre espace personnel Team Family Sports est prêt et actif.</p>
-    </div>
-  </div>
-);
+import AdminDashboard from './pages/AdminDashboard';
 
 // Écran de validation en attente
 const PendingApproval = () => (
@@ -48,7 +39,7 @@ function App() {
 
           {/* Wrapper pour les Routes Protégées (Utilisateurs Actifs) */}
           <Route element={<ProtectedRoute />}>
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard" element={<AdminDashboard />} />
             {/* Rediriger la racine vers le dashboard par défaut */}
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
           </Route>
