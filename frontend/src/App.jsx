@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
 import AdminDashboard from './pages/AdminDashboard';
+import CoachDashboard from './pages/CoachDashboard';
 
 // Écran de validation en attente
 const PendingApproval = () => (
@@ -40,6 +41,7 @@ function App() {
           {/* Wrapper pour les Routes Protégées (Utilisateurs Actifs) */}
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<AdminDashboard />} />
+            <Route path="/coach/dashboard" element={<CoachDashboard />} />
             {/* Rediriger la racine vers le dashboard par défaut */}
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
           </Route>
