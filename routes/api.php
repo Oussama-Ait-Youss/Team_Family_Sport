@@ -16,6 +16,10 @@ Route::middleware('auth:sanctum')->group(function () {
             return response()->json($request->user());
         });
         
+        // Profile Management routes
+        Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'show']);
+        Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update']);
+        
         // Future routes (dashboard, sessions, etc.) will go here
     });
 });
