@@ -5,6 +5,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
 
 import Dashboard from './pages/Dashboard';
+import Home from './pages/Home';
 
 // Composant d'attente
 const PendingApproval = () => (
@@ -33,13 +34,13 @@ function App() {
       <BrowserRouter>
         <Routes>
           {/* Routes publiques */}
+          <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/pending-approval" element={<PendingApproval />} />
 
           {/* Routes protégées */}
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
           </Route>
 
           {/* Fallback */}
