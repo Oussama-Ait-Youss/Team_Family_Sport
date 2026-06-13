@@ -5,38 +5,52 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('auth_token') || null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Restaurer la session au montage
-  useEffect(() => {
-    const fetchUser = async () => {
-      if (token) {
-        try {
-          const response = await api.get('/user/status');
-          setUser(response.data.data || response.data);
-        } catch (error) {
-          console.error('Session invalide ou expirée', error);
-          logout();
-        }
-      }
-      setIsLoading(false);
-    };
+  // Expose token in context for other components if needed, or just keep it internal
+  const [token, setTokenState] = useState(localStorage.getItem('token') || null);
 
-    fetchUser();
-  }, [token]);
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    
+    if (!storedToken) {
+      setIsLoading(false);
+      return;
+    }
+
+    api.get('/user')
+      .then(res => {
+        // Handle Laravel's data wrapping if necessary, or just use res.data
+        setUser(res.data.data || res.data);
+      })
+      .catch(() => {
+        localStorage.removeItem('token');
+        setUser(null);
+        setTokenState(null);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
 
   const login = async (email, password) => {
     setIsLoading(true);
     try {
       const response = await api.post('/login', { email, password });
       
-      const access_token = response.data.token || response.data.access_token;
-      const userData = response.data.user;
+      const accessToken = response.data.token || response.data.access_token;
       
-      localStorage.setItem('auth_token', access_token);
-      setToken(access_token);
-      setUser(userData);
+      localStorage.setItem('token', accessToken);
+      setTokenState(accessToken);
+      
+      try {
+        const userRes = await api.get('/user');
+        setUser(userRes.data.data || userRes.data);
+      } catch (err) {
+        if (response.data.user) {
+          setUser(response.data.user);
+        }
+      }
       
       return { success: true };
     } catch (error) {
@@ -51,14 +65,14 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      if (token) {
+      if (localStorage.getItem('token')) {
         await api.post('/logout');
       }
     } catch (error) {
-      console.error('Erreur lors de la déconnexion', error);
+      console.error(error);
     } finally {
-      localStorage.removeItem('auth_token');
-      setToken(null);
+      localStorage.removeItem('token');
+      setTokenState(null);
       setUser(null);
     }
   };

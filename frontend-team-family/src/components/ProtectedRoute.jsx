@@ -6,24 +6,17 @@ const ProtectedRoute = () => {
   const { user, token, isLoading } = useContext(AuthContext);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-zinc-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
-      </div>
-    );
+    return <div className="min-h-screen flex items-center justify-center">Chargement...</div>;
   }
 
-  // Redirection si non authentifié
-  if (!token || !user) {
+  if (!isLoading && (!token || !user)) {
     return <Navigate to="/login" replace />;
   }
 
-  // Redirection si compte en attente
-  if (user.status === 'pending') {
+  if (user?.status === 'pending') {
     return <Navigate to="/pending-approval" replace />;
   }
 
-  // Accès autorisé
   return <Outlet />;
 };
 
