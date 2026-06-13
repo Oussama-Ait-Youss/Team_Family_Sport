@@ -6,7 +6,7 @@ const ProtectedRoute = () => {
   const { user, token, isLoading } = useContext(AuthContext);
 
   if (isLoading) {
-    return <div className="min-h-screen flex items-center justify-center">Chargement...</div>;
+    return <p>Chargement...</p>;
   }
 
   if (!isLoading && (!token || !user)) {

@@ -6,8 +6,6 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-
-  // Expose token in context for other components if needed, or just keep it internal
   const [token, setTokenState] = useState(localStorage.getItem('token') || null);
 
   useEffect(() => {
@@ -18,9 +16,9 @@ export const AuthProvider = ({ children }) => {
       return;
     }
 
+    console.log("Hydrating token:", localStorage.getItem('token'));
     api.get('/user')
       .then(res => {
-        // Handle Laravel's data wrapping if necessary, or just use res.data
         setUser(res.data.data || res.data);
       })
       .catch(() => {

@@ -4,20 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
 
-// Placeholder pour le Dashboard
-const DashboardPlaceholder = () => (
-  <div className="min-h-screen bg-zinc-50 flex flex-col items-center justify-center p-4 font-sans">
-    <div className="bg-white p-8 rounded-xl shadow-sm border border-zinc-200 text-center max-w-md w-full">
-      <div className="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
-        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-        </svg>
-      </div>
-      <h1 className="text-2xl font-bold text-zinc-800 mb-2">Bienvenue sur le Dashboard Actif ! 🎉</h1>
-      <p className="text-zinc-500">Phase 1 complétée avec succès.</p>
-    </div>
-  </div>
-);
+import Dashboard from './pages/Dashboard';
 
 // Composant d'attente
 const PendingApproval = () => (
@@ -51,7 +38,7 @@ function App() {
 
           {/* Routes protégées */}
           <Route element={<ProtectedRoute />}>
-            <Route path="/dashboard" element={<DashboardPlaceholder />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
           </Route>
 
